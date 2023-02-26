@@ -4,27 +4,22 @@ fs.readFile("input.txt", "utf-8", (err, data) => {
 
     [size, str] = data.toString().split("\n");
 
-    let result = [];
-    let tempSize;
+    let dictionary = {};
 
-    for (let i = 0; i < str.length - 1; i++) {
-        let max = 1;
-        tempSize = size;
-        for (let j = i + 1; j < str.length - 1; j++) {
-            if (str[i] !== str[j] && tempSize > 0) {
-                max += 1;
-                tempSize -= 1;
-            }
-            if (tempSize == 0 && str[i] == str[j]) {
-                max += 1;
-            }
+    let l = 0;
+    let r = 0;
+
+    let maxCount = 0;
+
+    for (r=0; r < str.length; r++) {
+        dictionary[str[r]] = dictionary[str[r]] + 1 || 1;
+        maxCount = Math.max(maxCount, dictionary[str[r]]);
+        if (r-l+1-maxCount > size) {
+            dictionary[str[l]]--;
+            l++;
         }
-        result.push(max);
     }
 
-
-    const answer = Math.max(...result);
-
-    fs.writeFile("output.txt", answer.toString(), (err) => { })
+    fs.writeFile("output.txt", (r-l).toString(), (err) => { })
 
 });
